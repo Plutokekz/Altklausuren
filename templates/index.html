@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<div class="tile is-ancestor" id="results" style="padding: 20px">
+    <div class="tile is-3 is-vertical is-parent">
+        <div class="tile is-child box">
+            <p class="title">Filter</p>
+            <div>
+                {{ 'Art' }}
+                <br>
+                {% for count in filters['art'] %}
+                    <label class="checkbox">
+                        <input type="checkbox" id="{{ 'art' }}" value="{{ count['value'] }}"
+                               onclick="handleClick(this);"
+                               hx-trigger="click" hx-get="/search" hx-target="#results"
+                               hx-vals='js:{query: get_query()}'>
+                        {{ count['value'] }} ({{ count['count'] }})
+                    </label>
+                    <br>
+                {% endfor %}
+            </div>
+            <br>
+            <div>
+                {{ 'Fakultät' }}
+                <br>
+                {% for count in filters['faculty'] %}
+                    <label class="checkbox">
+                        <input type="checkbox" id="{{ 'faculty' }}" value="{{ count['value'] }}"
+                               onclick="handleClick(this);"
+                               hx-trigger="click" hx-get="/search" hx-target="#results"
+                               hx-vals='js:{query: get_query()}'>
+                        {{ count['value'] }} ({{ count['count'] }})
+                    </label>
+                    <br>
+                {% endfor %}
+            </div>
+            <br>
+            <div>
+                {{ 'Abschluss' }}
+                <br>
+                {% for count in filters['degree'] %}
+                    <label class="checkbox">
+                        <input type="checkbox" id="{{ 'degree' }}" value="{{ count['value'] }}"
+                               onclick="handleClick(this);"
+                               hx-trigger="click" hx-get="/search" hx-target="#results"
+                               hx-vals='js:{query: get_query()}'>
+                        {{ count['value'] }} ({{ count['count'] }})
+                    </label>
+                    <br>
+                {% endfor %}
+            </div>
+            <br>
+            <div>
+                <label>
+                    <a style="color: inherit" title="nicht all Abkürzungen gehen"> {{ "Fach " }}
+                        <input class="input is-small"
+                               id="course_input"
+                               type="search"
+                               onkeyup="searchHandler(this, 'course_list')"
+                               onsearch="searchHandler(this, 'course_list')">
+                    </a>
+                </label>
+                <br>
+                <ul id="course_list">
+                    {% for count in filters['course'] %}
+                        <li style="display: block">
+                            <label class="checkbox">
+                                <input type="checkbox" id="{{ 'course' }}" value="{{ count['value'] }}"
+                                       onclick="handleClick(this);"
+                                       hx-trigger="click" hx-get="/search" hx-target="#results"
+                                       hx-vals='js:{query: get_query()}'>
+                                {{ count['value'] }} ({{ count['count'] }})
+                            </label>
+                            <br>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <br>
+            <div>
+                <label>
+                    <a style="color: inherit" title="nicht all Abkürzungen gehen"> {{ 'Professor*innen' }}
+                        <input class="input is-small"
+                               id="course_input"
+                               type="search"
+                               onkeyup="searchHandler(this, 'prof_list')"
+                               onsearch="searchHandler(this, 'prof_list')">
+                    </a>
+                </label>
+                <br>
+            <ul id="prof_list">
+                {% for count in filters['professors'] %}
+                    <li style="display: block">
+                    <label class="checkbox">
+                        <input type="checkbox" id="{{ 'professors' }}" value="{{ count['value'] }}"
+                               onclick="handleClick(this);"
+                               hx-trigger="click" hx-get="/search" hx-target="#results"
+                               hx-vals='js:{query: get_query()}'>
+                        {{ count['value'] }} ({{ count['count'] }})
+                    </label>
+                    <br>
+                    </li>
+                {% endfor %}
+            </ul>
+            </div>
+            <br>
+            <div>
+                {{ 'Art des Documentes' }}
+                <br>
+                {% for count in filters['document_type'] %}
+                    <label class="checkbox">
+                        <input type="checkbox" id="{{ 'document_type' }}" value="{{ count['value'] }}"
+                               onclick="handleClick(this);"
+                               hx-trigger="click" hx-get="/search" hx-target="#results"
+                               hx-vals='js:{query: get_query()}'>
+                        {{ count['value'] }} ({{ count['count'] }})
+                    </label>
+                    <br>
+                {% endfor %}
+            </div>
+            <br>
+            <div>
+                {{ 'Datei Type' }}
+                <br>
+                {% for count in filters['filetype'] %}
+                    <label class="checkbox">
+                        <input type="checkbox" id="{{ 'filetype' }}" value="{{ count['value'] }}"
+                               onclick="handleClick(this);"
+                               hx-trigger="click" hx-get="/search" hx-target="#results"
+                               hx-vals='js:{query: get_query()}'>
+                        {{ count['value'] }} ({{ count['count'] }})
+                    </label>
+                    <br>
+                {% endfor %}
+            </div>
+            <br>
+        </div>
+
+    </div>
+    <div class="tile is-parent">
+        <div class="tile is-child box">
+            <section class="section">
+                <div class="container">
+                    <nav class="panel">
+                        <p class="panel-heading">
+                            Suche
+                        </p>
+                        <div class="panel-block">
+                            <p class="control has-icons-left">
+                                <label for="search"></label><input id="search" class="input" type="text"
+                                                                   placeholder="Search"
+                                                                   hx-trigger="keyup changed delay:500ms"
+                                                                   hx-get="/search" hx-target="#results"
+                                                                   hx-vals='js:{query: get_query()}'>
+                                <span class="icon is-left">
+                  <i class="fas fa-search" aria-hidden="true"></i>
+                </span>
+                            </p>
+                        </div>
+                        <div>
+                        </div>
+                    </nav>
+                </div>
+            </section>
+        </div>
+    </div>
+
+</div>
+<script src="https://unpkg.com/htmx.org@1.8.0"></script>
+<script>
+    query = {"query": "", "filters": {}};
+    const MIN_DISTANCE = 1;
+
+    function add_filter(category, filter, option) {
+        if (query['filters'].hasOwnProperty(category)) {
+            query['filters'][category][filter] = option;
+        } else {
+            query['filters'][category] = {};
+            query['filters'][category][filter] = option;
+        }
+
+    }
+
+    function get_query() {
+        const input = document.getElementById("search");
+        query['query'] = input.value;
+        return query;
+    }
+
+    function remove_filter(category, filter) {
+        if (query['filters'].hasOwnProperty(category)) {
+            if (query['filters'][category].hasOwnProperty(filter)) {
+                delete query['filters'][category][filter];
+            }
+            if (Object.keys(query['filters'][category]).length === 0) {
+                delete query['filters'][category];
+            }
+        }
+    }
+
+    function handleClick(cb) {
+        const category = cb.id;
+        const filter = cb.value;
+        if (cb.checked) {
+            add_filter(category, filter, 1);
+        } else {
+            remove_filter(category, filter)
+        }
+    }
+
+    function _min(d0, d1, d2, bx, ay) {
+        return d0 < d1 || d2 < d1
+            ? d0 > d2
+                ? d2 + 1
+                : d0 + 1
+            : bx === ay
+                ? d1
+                : d1 + 1;
+    }
+
+    function levenshtein(a, b) {
+        if (a === b) {
+            return 0;
+        }
+
+        if (a.length > b.length) {
+            var tmp = a;
+            a = b;
+            b = tmp;
+        }
+
+        var la = a.length;
+        var lb = b.length;
+
+        while (la > 0 && (a.charCodeAt(la - 1) === b.charCodeAt(lb - 1))) {
+            la--;
+            lb--;
+        }
+
+        var offset = 0;
+
+        while (offset < la && (a.charCodeAt(offset) === b.charCodeAt(offset))) {
+            offset++;
+        }
+
+        la -= offset;
+        lb -= offset;
+
+        if (la === 0 || lb < 3) {
+            return lb;
+        }
+
+        var x = 0;
+        var y;
+        var d0;
+        var d1;
+        var d2;
+        var d3;
+        var dd;
+        var dy;
+        var ay;
+        var bx0;
+        var bx1;
+        var bx2;
+        var bx3;
+
+        var vector = [];
+
+        for (y = 0; y < la; y++) {
+            vector.push(y + 1);
+            vector.push(a.charCodeAt(offset + y));
+        }
+
+        var len = vector.length - 1;
+
+        for (; x < lb - 3;) {
+            bx0 = b.charCodeAt(offset + (d0 = x));
+            bx1 = b.charCodeAt(offset + (d1 = x + 1));
+            bx2 = b.charCodeAt(offset + (d2 = x + 2));
+            bx3 = b.charCodeAt(offset + (d3 = x + 3));
+            dd = (x += 4);
+            for (y = 0; y < len; y += 2) {
+                dy = vector[y];
+                ay = vector[y + 1];
+                d0 = _min(dy, d0, d1, bx0, ay);
+                d1 = _min(d0, d1, d2, bx1, ay);
+                d2 = _min(d1, d2, d3, bx2, ay);
+                dd = _min(d2, d3, dd, bx3, ay);
+                vector[y] = dd;
+                d3 = d2;
+                d2 = d1;
+                d1 = d0;
+                d0 = dy;
+            }
+        }
+
+        for (; x < lb;) {
+            bx0 = b.charCodeAt(offset + (d0 = x));
+            dd = ++x;
+            for (y = 0; y < len; y += 2) {
+                dy = vector[y];
+                vector[y] = dd = _min(dy, d0, dd, bx0, vector[y + 1]);
+                d0 = dy;
+            }
+        }
+
+        return dd;
+    }
+
+    function searchHandler(input, list_id) {
+        const ul = document.getElementById(list_id);
+        const lis = ul.getElementsByTagName('li');
+        const searchText = input.value.toLowerCase();
+        if (searchText.length > 0) {
+            for (const li of lis) {
+                const label = li.childNodes[1];
+                const checkbox = label.childNodes[1];
+                const value = checkbox.value.toLowerCase();
+                if (value.includes(searchText) || levenshtein(value, searchText) <= MIN_DISTANCE) {
+                    li.style.display = "";
+                } else {
+                    li.style.display = "none";
+                }
+            }
+        } else {
+            for (const li of lis) {
+                li.style.display = "";
+            }
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% for value in results['hits'] %}
+    {% if loop.index == num_per_page-1 %}
+        <a class="panel-block" href="{{ request['client'].host }}/file/{{ value['document']['id'] }}"
+           target="_blank" hx-get="/page/?page={{ page }}" hx-trigger="revealed" hx-swap="afterend"
+           hx-vals='js:{query: get_query()}'>
+    {% else %}
+        <a class="panel-block" href="{{ request['client'].host }}/file/{{ value['document']['id'] }}"
+           target="_blank">
+    {% endif %}
+<div style="float:left;">
+    <ol style="list-style: none; font-size: 14px; line-height: 32px; font-weight: bold;">
+        <li style="clear: both;">{{ value['document']['uni'] }} {{ value['document']['faculty'] }}
+            {{ value['document']['course'] }} {{ value['document']['semester'] }} {{ value['document']['year'] }}
+        </li>
+        <li style="clear: both;"> {{ value['document']['filename'] }}</li>
+        {% for professor in value['document']['professors'] %}
+            <li style="clear: both;"> professor: {{ professor }}</li>
+        {% endfor %}
+        {% for highlight in value['highlights'] %}
+            <li style="clear: both;"> field: {{ highlight['field'] }}</li>
+            {% if 'snippets' in highlight.keys() %}
+                {% for snippet in highlight['snippets'] %}
+                    <li style="clear: both;"> {{ snippet|safe }}</li>
+                {% endfor %}
+            {% else %}
+                <li style="clear: both;"> {{ highlight['snippet']|safe }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</div>
+<div style="float:right">
+    <img src="{{ url_for('data', path=value['document']['directory'][6:]+'/'+value['document']['filename'][:-3]+'png') }}"
+         width="200" height="400" alt="nichts zu sehen">
+</div>
+</a>
+{% endfor %}

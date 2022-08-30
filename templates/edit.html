@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>Edit</title>
+</head>
+<body>
+<div class="tile is-ancestor" style="padding: 20px">
+    <div class="tile is-vertical is-5">
+        <div class="tile">
+            <div class="tile is-parent">
+                <article class="tile is-child box">
+                    <p class="title">Edit</p>
+                    <p class="subtitle">With an image</p>
+                    <div class="columns">
+                        <div class="column">
+                            {% for key, value in meta.items() %}
+                                <div class="columns is-mobile">
+                                    <div class="column">
+                                        <p>{{ key }}</p>
+                                    </div>
+                                    <div class="column">
+                                        <input id="{{ key }}" class="input" type="text" placeholder="{{ value }}"
+                                               value="{{ value }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="tile is-parent">
+            <article class="tile is-child box">
+                <button style="right:auto" class="button">Update</button>
+                <div class="content">
+                    <!-- Content -->
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="tile is-parent">
+        <article class="tile is-child box">
+                <iframe src="{{ url_for('pdf', path=thumbnail) }}" style="position: relative; height: 100%; width: 100%;"></iframe>
+        </article>
+    </div>
+</div>
+</body>
+</html>
