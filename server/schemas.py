@@ -16,7 +16,10 @@ class SemesterType(Enum):
 class Semester(BaseModel):
     id: str
     type: SemesterType
-    year: int
+    year: str
+
+    class Config:
+        orm_mode = True
 
 
 class Course(BaseModel):
@@ -26,12 +29,18 @@ class Course(BaseModel):
     shortcut_char: str
     shortcut_hyphen: str
 
+    class Config:
+        orm_mode = True
+
 
 class CourseInSemester(BaseModel):
     id: str
     course_id: str
     semester_id: str
     link: str
+
+    class Config:
+        orm_mode = True
 
 
 class Examen(BaseModel):
@@ -43,6 +52,9 @@ class Examen(BaseModel):
     solution: bool
     professor: str
     file_id: str
+
+    class Config:
+        orm_mode = True
 
 
 class File(BaseModel):
@@ -56,3 +68,6 @@ class File(BaseModel):
     text: str
     images_path: str
     url: str
+
+    class Config:
+        orm_mode = True
